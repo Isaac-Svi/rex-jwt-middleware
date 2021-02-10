@@ -1,17 +1,7 @@
-const {
-  login,
-  registerWithEmailAndPassword,
-  protect,
-  refresh,
-} = require('./auth')
+const RexUser = require('./RexUser')
 const TokenProcessor = require('./TokenProcessor')
-const User = require('./User')
 
 module.exports = {
-  login,
-  registerWithEmailAndPassword,
-  protect,
-  refresh,
+  RexUser,
   TokenProcessor,
-  User
 }
