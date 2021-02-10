@@ -100,11 +100,11 @@ const RexUser = (schema) => {
   }
 
   async function refresh(req, res, next) {
-    const { cookieName } = req.tokens.refreshToken
+    const { tokens } = req
+    const { cookieName, secret } = tokens.refreshToken
     const { [cookieName]: refreshToken } = cookie.parse(
       String(req.headers.cookie)
     )
-    const { tokens } = req
 
     if (!refreshToken) {
       return res.send({ ok: false, error: 'no cookie', accessToken: '' })
@@ -112,7 +112,7 @@ const RexUser = (schema) => {
 
     let payload = null
     try {
-      payload = verify(refreshToken, req.tokens.refreshToken.secret)
+      payload = verify(refreshToken, secret)
     } catch (err) {
       console.log(err.message)
       return res.json({ ok: false, accessToken: '', error: err.message })
