@@ -5,6 +5,7 @@ const {
   refresh,
 } = require('./auth')
 const TokenProcessor = require('./TokenProcessor')
+const User = require('./User')
 
 module.exports = {
   login,
@@ -12,4 +13,5 @@ module.exports = {
   protect,
   refresh,
   TokenProcessor,
+  User
 }

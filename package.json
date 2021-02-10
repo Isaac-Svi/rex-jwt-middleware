@@ -2,20 +2,29 @@
   "name": "rex-jwt-middleware",
   "version": "1.0.0",
   "description": "Authentication strategy",
-  "main": "./build/index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "webpack"
   },
-  "author": "Isaac Svi",
-  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie": "^0.4.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15"
   },
-  "devDependencies": {
-    "webpack": "^5.21.2",
-    "webpack-cli": "^4.5.0"
-  }
+  "keywords": [
+    "react",
+    "express",
+    "jwt"
+  ],
+  "author": "Isaac Svi",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Isaac-Svi/rex-jwt-middleware.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Isaac-Svi/rex-jwt-middleware.git/issues"
+  },
+  "homepage": "https://github.com/Isaac-Svi/rex-jwt-middleware.git#readme"
 }
