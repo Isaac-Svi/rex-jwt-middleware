@@ -100,7 +100,10 @@ const RexUser = (schema) => {
   }
 
   async function refresh(req, res, next) {
-    const { rex: refreshToken } = cookie.parse(String(req.headers.cookie))
+    const { cookieName } = req.tokens.refreshToken
+    const { [cookieName]: refreshToken } = cookie.parse(
+      String(req.headers.cookie)
+    )
     const { tokens } = req
 
     if (!refreshToken) {
