@@ -7,13 +7,13 @@ rex-jwt-middleware is a package made with the intention to take care of a lot of
 - [Installation](#installation)
 - [Setup](#setup)
   - [Token Setup](#token-setup)
-  - [Token Parameters](https://github.com/Isaac-Svi/rex-jwt-middleware#token-parameters)
-  - [User Model](https://github.com/Isaac-Svi/rex-jwt-middleware#user-model)
-- [Use](https://github.com/Isaac-Svi/rex-jwt-middleware#Use)
-  - [Authentication Routes](https://github.com/Isaac-Svi/rex-jwt-middleware#routes)
-  - [Refresh Route](https://github.com/Isaac-Svi/rex-jwt-middleware#refresh-route)
-  - [Protected Route](https://github.com/Isaac-Svi/rex-jwt-middleware#protected-route)
-- [Description](https://github.com/Isaac-Svi/rex-jwt-middleware#description)
+  - [Token Parameters](#token-parameters)
+  - [User Model](#user-model)
+- [Use](#use)
+  - [Authentication Routes](#auth-routes)
+  - [Refresh Route](#refresh-route)
+  - [Protected Route](#protected-route)
+- [Description](#description)
 
 # Installation <a name="installation"></a>
 `npm i rex-jwt-middleware`
@@ -39,7 +39,7 @@ app.use(new TokenProcessor({
 	},
 }))
 ```
-#### [](https://github.com/Isaac-Svi/rex-jwt-middleware#token-parameters)Parameters:
+#### Parameters: <a name="token-parameters"></a>
 `refreshToken`
 | param | description |
 |--|--|
@@ -55,7 +55,7 @@ app.use(new TokenProcessor({
 | exp| Number of seconds this token is meant to last. |
 
 
-### [](https://github.com/Isaac-Svi/rex-jwt-middleware#user-model)Setting up our User model:
+### Setting up our User model: <a name="user-model"></a>
 Before creating our routes and using our middleware, we need to initialize the User model for our RexUser by providing a schema.  Adding fields to the schema is done in the same way one can add fields to a mongoose schema.
 ```javascript
 const { RexUser } = require('rex-jwt-middleware')
@@ -73,19 +73,19 @@ const user = RexUser({
 	},
 })
 ```
-# [](https://github.com/Isaac-Svi/rex-jwt-middleware#Use)Use
+# Use <a name="use"></a>
 ### [](https://github.com/Isaac-Svi/rex-jwt-middleware#routes)Adding authentication/registration routes:
 These routes can be called anything.  This is just an example:
 ```javascript
 app.post('/api/register', user.registerWithEmailAndPassword)
 app.post('/api/login', user.login)
 ```
-### [](https://github.com/Isaac-Svi/rex-jwt-middleware#refresh-route)Adding a route to refresh an expired access token:
+### Adding a route to refresh an expired access token: <a name="refresh-route"></a>
 We need to add one more route for the refresh token, so that we can send back an access token when the user needs to access protected routes.  This route **must** be the same as the route field in the refreshToken field in the TokenProcessor object above.  Meaning, this route and that can be named whatever you want them to be named, but they have to match.
 ```javascript
 app.post('/api/refresh', user.refresh)
 ```
-### [](https://github.com/Isaac-Svi/rex-jwt-middleware#protected-route)Setting up a protected route:
+### Setting up a protected route: <a name="protected-route"></a>
 Protected routes can only be accessed if the user sends us a valid access token.
 ```javascript
 app.get('/secret', user.protect, (req, res) => {
@@ -93,5 +93,5 @@ app.get('/secret', user.protect, (req, res) => {
 })
 ```
 
-# [](https://github.com/Isaac-Svi/rex-jwt-middleware#description)Description of the process:
+# Description of the process: <a name="description"></a>
 coming soon
