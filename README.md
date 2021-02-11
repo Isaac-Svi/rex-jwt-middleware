@@ -94,4 +94,6 @@ app.get('/secret', user.protect, (req, res) => {
 ```
 
 # Description of the process: <a name="description"></a>
-coming soon
+This package uses two JWT's to carry out authentication, an access token and a refresh token.  When a user logs into the site, they receive these two tokens.  The access token can be stored either in memory or localStorage, and the refresh token gets stored in an HTTP only cookie.  
+
+The access token is what allows a user to access protected routes.  Once the access token expires, as long as the refresh token hasn't expired, the refresh route can be used to get a new access token before accessing a protected route.
