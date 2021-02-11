@@ -16,7 +16,7 @@ rex-jwt-middleware is a package made with the intention to take care of a lot of
 - [Description](#description)
 
 # Installation <a name="installation"></a>
-`npm i rex-jwt-middleware`
+`npm i rex-jwt-middleware`  
 `yarn add rex-jwt-middleware`
 
 # Setup <a name="setup"></a>
