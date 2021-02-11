@@ -4,9 +4,9 @@ rex-jwt-middleware is a package made with the intention to take care of a lot of
 
 # Contents
 
-- [Installation](https://github.com/Isaac-Svi/rex-jwt-middleware#Installation)
-- [Setup](https://github.com/Isaac-Svi/rex-jwt-middleware#Setup)
-  - [Token Setup](https://github.com/Isaac-Svi/rex-jwt-middleware#token-setup)
+- [Installation](#installation)
+- [Setup](#setup)
+  - [Token Setup](#token-setup)
   - [Token Parameters](https://github.com/Isaac-Svi/rex-jwt-middleware#token-parameters)
   - [User Model](https://github.com/Isaac-Svi/rex-jwt-middleware#user-model)
 - [Use](https://github.com/Isaac-Svi/rex-jwt-middleware#Use)
@@ -15,14 +15,14 @@ rex-jwt-middleware is a package made with the intention to take care of a lot of
   - [Protected Route](https://github.com/Isaac-Svi/rex-jwt-middleware#protected-route)
 - [Description](https://github.com/Isaac-Svi/rex-jwt-middleware#description)
 
-# [](https://github.com/Isaac-Svi/rex-jwt-middleware#Installation)Installation
+# Installation <a name="installation"></a>
 `npm i rex-jwt-middleware`
 `yarn add rex-jwt-middleware`
 
-# [](https://github.com/Isaac-Svi/rex-jwt-middleware#Setup)Setup
+# Setup <a name="setup"></a>
 (I'll describe how this all works in the next sections.)
  
-### [](https://github.com/Isaac-Svi/rex-jwt-middleware#token-setup)Add the following next to all other express middleware:
+### Add the following next to all other express middleware: <a name="token-setup"></a>
 ```javascript
 const { TokenProcessor } = require('rex-jwt-middleware')
 
