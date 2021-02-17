@@ -1,6 +1,6 @@
 # rex-jwt-middleware
 
-rex-jwt-middleware is a package made with the intention to take care of a lot of the boilerplate code for basic user authentication with JWT's, using bcryptjs, jsonwebtoken, cookie, and mongoose.
+rex-jwt-middleware is a package made with the intention to take care of a lot of the boilerplate code for basic user authentication with JWT's, using bcryptjs, jsonwebtoken, cookie, and mongoose.  Best used with package [rex-jwt-client](https://www.npmjs.com/package/rex-jwt-client).
 
 # Contents
 
@@ -27,16 +27,16 @@ rex-jwt-middleware is a package made with the intention to take care of a lot of
 const { TokenProcessor } = require('rex-jwt-middleware')
 
 app.use(new TokenProcessor({
-	refreshToken: {
-		secret: process.env.REFRESH_TOKEN_SECRET,
-		exp: 20 * 60, // Number of seconds from epoch
-		route: '/api/refresh',
-		cookieName: 'rex',
-	},
-	accessToken: {
-		secret: process.env.ACCESS_TOKEN_SECRET,
-		exp: 10,
-	},
+  refreshToken: {
+    secret: process.env.REFRESH_TOKEN_SECRET,
+    exp: 20 * 60, // Number of seconds from epoch
+    route: '/api/refresh',
+    cookieName: 'rex',
+  },
+  accessToken: {
+    secret: process.env.ACCESS_TOKEN_SECRET,
+    exp: 10,
+  },
 }))
 ```
 #### Parameters: <a name="token-parameters"></a>
@@ -61,16 +61,16 @@ Before creating our routes and using our middleware, we need to initialize the U
 const { RexUser } = require('rex-jwt-middleware')
 
 const user = RexUser({
-	email: {
-		type:  String,
-		min:  6,
-		required:  true,
-	},
-	password: {
-		type:  String,
-		min:  50,
-		required:  true,
-	},
+  email: {
+    type: String,
+    min: 6,
+    required: true,
+  },
+  password: {
+    type: String,
+    min: 50,
+    required: true,
+  },
 })
 ```
 # Use <a name="use"></a>
@@ -79,6 +79,7 @@ These routes can be called anything.  This is just an example:
 ```javascript
 app.post('/api/register', user.registerWithEmailAndPassword)
 app.post('/api/login', user.login)
+app.post('/api/logout', user.logout)
 ```
 ### Adding a route to refresh an expired access token: <a name="refresh-route"></a>
 We need to add one more route for the refresh token, so that we can send back an access token when the user needs to access protected routes.  This route **must** be the same as the route field in the refreshToken field in the TokenProcessor object above.  Meaning, this route and that can be named whatever you want them to be named, but they have to match.
@@ -89,7 +90,7 @@ app.post('/api/refresh', user.refresh)
 Protected routes can only be accessed if the user sends us a valid access token.
 ```javascript
 app.get('/secret', user.protect, (req, res) => {
-	res.send("here is some secret content")
+  res.send("here is some secret content")
 })
 ```
 

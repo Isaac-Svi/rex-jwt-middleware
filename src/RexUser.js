@@ -145,7 +145,12 @@ const RexUser = (schema) => {
     })
   }
 
-  return { login, registerWithEmailAndPassword, protect, refresh }
+  async function logout(req, res, next) {
+    const { tokens } = req
+    tokens.sendRefreshToken('')
+  }
+
+  return { login, registerWithEmailAndPassword, protect, refresh, logout }
 }
 
 module.exports = RexUser
