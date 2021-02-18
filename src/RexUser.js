@@ -147,7 +147,8 @@ const RexUser = (schema) => {
 
   async function logout(req, res, next) {
     const { tokens } = req
-    tokens.sendRefreshToken('')
+    tokens.sendRefreshToken(res, '')
+    res.status(200).send({ ok: true })
   }
 
   return { login, registerWithEmailAndPassword, protect, refresh, logout }
