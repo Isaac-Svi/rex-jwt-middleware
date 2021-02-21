@@ -4,14 +4,19 @@ const cookie = require('cookie')
 const mongoose = require('mongoose')
 
 const RexUser = (schema) => {
-  const userSchema = mongoose.Schema({
-    ...schema,
-    tokenVersion: {
-      type: Number,
-      required: true,
-      default: 0,
+  const userSchema = mongoose.Schema(
+    {
+      ...schema,
+      tokenVersion: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
     },
-  })
+    {
+      timestamps: true,
+    }
+  )
   const User = mongoose.model('User', userSchema)
 
   async function login(req, res, next) {
@@ -49,7 +54,7 @@ const RexUser = (schema) => {
   }
 
   async function registerWithEmailAndPassword(req, res, next) {
-    const { email, password } = req.body
+    const { email, password, ...rest } = req.body
 
     try {
       const foundUser = await User.findOne({ email })
@@ -61,6 +66,7 @@ const RexUser = (schema) => {
       await User.create({
         email,
         password: await hash(password, 10),
+        ...rest,
       })
 
       res.status(201).send({ msg: 'User created successfully' })
