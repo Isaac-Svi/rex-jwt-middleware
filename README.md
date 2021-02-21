@@ -71,13 +71,18 @@ const user = RexUser({
     min: 50,
     required: true,
   },
+  firstName: {
+    type: String,
+    required: true
+  },
+  // etc.
 })
 ```
 # Use <a name="use"></a>
 ### [](https://github.com/Isaac-Svi/rex-jwt-middleware#routes)Adding authentication/registration routes:
 These routes can be called anything.  This is just an example:
 ```javascript
-app.post('/api/register', user.registerWithEmailAndPassword)
+app.post('/api/register', user.register)
 app.post('/api/login', user.login)
 app.post('/api/logout', user.logout)
 ```

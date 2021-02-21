@@ -53,7 +53,7 @@ const RexUser = (schema) => {
     }
   }
 
-  async function registerWithEmailAndPassword(req, res, next) {
+  async function register(req, res, next) {
     const { email, password, ...rest } = req.body
 
     try {
@@ -157,7 +157,7 @@ const RexUser = (schema) => {
     res.status(200).send({ ok: true })
   }
 
-  return { login, registerWithEmailAndPassword, protect, refresh, logout }
+  return { login, register, protect, refresh, logout }
 }
 
 module.exports = RexUser
