@@ -57,9 +57,11 @@ const RexUser = (schema) => {
   }
 
   async function register(req, res, next) {
-    const { email, password } = req.body
+    let { email, password } = req.body
 
     try {
+      password = await hash(password, 10)
+
       validateRegisterInfo(schema, { email, password, ...req.body })
 
       const foundUser = await User.findOne({ email })
@@ -70,7 +72,7 @@ const RexUser = (schema) => {
 
       await User.create({
         email,
-        password: await hash(password, 10),
+        password,
         ...req.body,
       })
 
