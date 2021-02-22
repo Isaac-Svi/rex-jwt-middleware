@@ -6,7 +6,7 @@ const checkExtra = (schema, input) => {
 }
 
 const checkRequired = (key, schema, input) => {
-  if (schema[key].required && !input[key]) {
+  if (schema[key].required && !schema[key].default && !input[key]) {
     throw new Error('Field missing')
   }
 }
@@ -40,7 +40,7 @@ const validateSchema = (schema, input) => {
     checkExtra(schema, input)
 
     for (let key in schema) {
-      // check if required key is present
+      // check if required key is present, and if it is, whether a default is provided
       checkRequired(key, schema, input)
 
       // check if field is of proper type
