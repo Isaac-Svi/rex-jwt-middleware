@@ -60,6 +60,10 @@ const RexUser = (schema) => {
     let { email, password } = req.body
 
     try {
+      // default is 6
+      if (password.length < 6)
+        throw new Error('Password must be at least 6 characters long')
+
       password = await hash(password, 10)
 
       validateRegisterInfo(schema, { ...req.body, email, password })
