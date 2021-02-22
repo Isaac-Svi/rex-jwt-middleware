@@ -62,7 +62,7 @@ const RexUser = (schema) => {
     try {
       password = await hash(password, 10)
 
-      validateRegisterInfo(schema, { email, password, ...req.body })
+      validateRegisterInfo(schema, { ...req.body, email, password })
 
       const foundUser = await User.findOne({ email })
       if (foundUser) {
@@ -71,9 +71,9 @@ const RexUser = (schema) => {
       }
 
       await User.create({
+        ...req.body,
         email,
         password,
-        ...req.body,
       })
 
       res.status(201).send({ msg: 'User created successfully' })
