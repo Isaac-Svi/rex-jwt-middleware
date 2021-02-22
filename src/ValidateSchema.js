@@ -7,7 +7,7 @@ const checkExtra = (schema, input) => {
 
 const checkRequired = (key, schema, input) => {
   if (schema[key].required && !schema[key].default && !input[key]) {
-    throw new Error('Field missing')
+    throw new Error(`${key} missing`)
   }
 }
 
