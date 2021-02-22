@@ -2,6 +2,7 @@ const { compare, hash } = require('bcryptjs')
 const { verify } = require('jsonwebtoken')
 const cookie = require('cookie')
 const mongoose = require('mongoose')
+const validateRegisterInfo = require('./ValidateSchema')
 
 const RexUser = (schema) => {
   const userSchema = mongoose.Schema(
@@ -24,6 +25,8 @@ const RexUser = (schema) => {
     const { tokens } = req
 
     try {
+      if (!email || !password) throw new Error('Insufficient credentials')
+
       const foundUser = await User.findOne({ email })
       if (!foundUser) {
         throw new Error("User doesn't exist")
@@ -57,6 +60,8 @@ const RexUser = (schema) => {
     const { email, password, ...rest } = req.body
 
     try {
+      validateRegisterInfo(schema, { email, password, ...rest })
+
       const foundUser = await User.findOne({ email })
       if (foundUser) {
         res.status(400)
