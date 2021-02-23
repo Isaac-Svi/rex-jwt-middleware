@@ -146,7 +146,12 @@ const RexUser = (schema) => {
     )
 
     if (!refreshToken) {
-      return res.send({ ok: false, error: 'no cookie', accessToken: '' })
+      return res.send({
+        ok: false,
+        error: 'no cookie',
+        userInfo: {},
+        accessToken: '',
+      })
     }
 
     let payload = null
@@ -154,15 +159,31 @@ const RexUser = (schema) => {
       payload = verify(refreshToken, secret)
     } catch (err) {
       console.log(err.message)
-      return res.json({ ok: false, accessToken: '', error: err.message })
+      return res.json({
+        ok: false,
+        accessToken: '',
+        userInfo: {},
+        error: err.message,
+      })
     }
 
     const user = await User.findById(payload.id)
 
-    if (!user) return res.send({ ok: false, accessToken: '', error: 'no user' })
+    if (!user)
+      return res.send({
+        ok: false,
+        accessToken: '',
+        userInfo: {},
+        error: 'no user',
+      })
 
     if (user.tokenVersion !== payload.tokenVersion)
-      return res.send({ ok: false, accessToken: '', error: 'expired version' })
+      return res.send({
+        ok: false,
+        accessToken: '',
+        userInfo: {},
+        error: 'expired version',
+      })
 
     user.tokenVersion += 1
     await user.save()
@@ -175,8 +196,17 @@ const RexUser = (schema) => {
       })
     )
 
+    let { publicFields: fields } = res.locals
+    fields = fields || ['email']
+
+    const userInfo = {}
+    fields.forEach((field) => {
+      userInfo[field] = user[field]
+    })
+
     return res.send({
       ok: true,
+      userInfo,
       accessToken: tokens.generateAccessToken({
         id: user._id,
         email: user.email,
