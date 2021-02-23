@@ -1,3 +1,10 @@
+const checkFields = (schema, fields) => {
+  for (field of fields) {
+    if (!schema[field]) throw new Error('Field not present in schema')
+  }
+  return true
+}
+
 const checkExtra = (schema, input) => {
   for (i in input) {
     if (!schema[i]) throw new Error('Field not from schema present')
@@ -63,5 +70,5 @@ const validateSchema = (schema, input) => {
 
 module.exports = {
   validateSchema,
-  checkExtra,
+  checkFields,
 }

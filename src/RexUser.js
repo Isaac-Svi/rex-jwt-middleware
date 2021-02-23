@@ -2,7 +2,7 @@ const { compare, hash } = require('bcryptjs')
 const { verify } = require('jsonwebtoken')
 const cookie = require('cookie')
 const mongoose = require('mongoose')
-const { validateSchema, checkExtra } = require('./ValidateSchema')
+const { validateSchema, checkFields } = require('./ValidateSchema')
 
 const RexUser = (schema) => {
   const userSchema = mongoose.Schema(
@@ -22,7 +22,7 @@ const RexUser = (schema) => {
 
   const fields = (publicFields) => {
     try {
-      if (checkExtra(schema, publicFields)) {
+      if (checkFields(schema, publicFields)) {
         return (req, res, next) => {
           res.locals.publicFields = publicFields
           next()
