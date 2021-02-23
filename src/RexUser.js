@@ -2,7 +2,7 @@ const { compare, hash } = require('bcryptjs')
 const { verify } = require('jsonwebtoken')
 const cookie = require('cookie')
 const mongoose = require('mongoose')
-const validateRegisterInfo = require('./ValidateSchema')
+const { validateSchema, checkExtra } = require('./ValidateSchema')
 
 const RexUser = (schema) => {
   const userSchema = mongoose.Schema(
@@ -19,6 +19,19 @@ const RexUser = (schema) => {
     }
   )
   const User = mongoose.model('User', userSchema)
+
+  const fields = (publicFields) => {
+    try {
+      if (checkExtra(schema, publicFields)) {
+        return (req, res, next) => {
+          res.locals.publicFields = publicFields
+          next()
+        }
+      }
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
 
   async function login(req, res, next) {
     const { email, password } = req.body
@@ -45,9 +58,18 @@ const RexUser = (schema) => {
         })
       )
 
+      let { publicFields: fields } = res.locals
+      fields = fields || ['email']
+
+      const userInfo = {}
+      fields.forEach((field) => {
+        userInfo[field] = foundUser[field]
+      })
+
       res.status(200).send({
+        userInfo,
         accessToken: tokens.generateAccessToken({
-          id: foundUser.id,
+          id: foundUser._id,
           email: foundUser.email,
         }),
       })
@@ -66,7 +88,7 @@ const RexUser = (schema) => {
 
       password = await hash(password, 10)
 
-      validateRegisterInfo(schema, { ...req.body, email, password })
+      validateSchema(schema, { ...req.body, email, password })
 
       const foundUser = await User.findOne({ email })
       if (foundUser) {
@@ -168,7 +190,7 @@ const RexUser = (schema) => {
     res.status(200).send({ ok: true })
   }
 
-  return { login, register, protect, refresh, logout }
+  return { login, register, protect, refresh, logout, fields }
 }
 
 module.exports = RexUser

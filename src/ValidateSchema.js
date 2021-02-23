@@ -1,6 +1,6 @@
 const checkExtra = (schema, input) => {
   for (i in input) {
-    if (!schema[i]) throw new Error('Extra field present')
+    if (!schema[i]) throw new Error('Field not from schema present')
   }
   return true
 }
@@ -61,4 +61,7 @@ const validateSchema = (schema, input) => {
   }
 }
 
-module.exports = validateSchema
+module.exports = {
+  validateSchema,
+  checkExtra,
+}
