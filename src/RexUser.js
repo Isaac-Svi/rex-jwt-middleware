@@ -22,7 +22,7 @@ const RexUser = (schema) => {
 
   const fields = (publicFields) => {
     try {
-      if (checkFields(schema, publicFields)) {
+      if (checkFields(userSchema.paths, publicFields)) {
         return (req, res, next) => {
           res.locals.publicFields = publicFields
           next()
