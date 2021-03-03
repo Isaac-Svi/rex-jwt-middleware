@@ -220,7 +220,7 @@ const RexUser = (schema) => {
     res.status(200).send({ ok: true })
   }
 
-  return { login, register, protect, refresh, logout, fields }
+  return { login, register, protect, refresh, logout, fields, User }
 }
 
 module.exports = RexUser
