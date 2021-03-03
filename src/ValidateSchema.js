@@ -21,7 +21,8 @@ const checkRequired = (key, schema, input) => {
 }
 
 const checkType = (key, schema, input) => {
-  const type = typeof (schema[key].type ?? schema[key])()
+  // checks for simple schemas and arrays, but need to also check for nested schemas
+  const type = typeof (schema[key].type ?? schema[key][0].type ?? schema[key])()
 
   if (input[key] && type !== typeof input[key])
     throw new Error(`${key} must be a valid ${type}`)
