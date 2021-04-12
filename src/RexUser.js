@@ -82,9 +82,10 @@ const RexUser = (schema) => {
     let { email, password } = req.body
 
     try {
+      if (!email || !password) throw new Error('Insufficient credentials provided')
+
       // default is 6
-      if (password.length < 6)
-        throw new Error('Password must be at least 6 characters long')
+      if (password.length < 6) throw new Error('Password must be at least 6 characters long')
 
       password = await hash(password, 10)
 
@@ -141,9 +142,7 @@ const RexUser = (schema) => {
   async function refresh(req, res, next) {
     const { tokens } = req
     const { cookieName, secret } = tokens.refreshToken
-    const { [cookieName]: refreshToken } = cookie.parse(
-      String(req.headers.cookie)
-    )
+    const { [cookieName]: refreshToken } = cookie.parse(String(req.headers.cookie))
 
     if (!refreshToken) {
       return res.send({

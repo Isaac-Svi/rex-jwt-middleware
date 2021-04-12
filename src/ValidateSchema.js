@@ -15,14 +15,21 @@ const checkExtra = (schema, input) => {
 const checkRequired = (key, schema, input) => {
   const { required, default: d } = schema[key]
   const isDefaultNull = d === null || d === undefined
-  if (required && isDefaultNull && !input[key]) {
-    throw new Error(`${key} missing`)
-  }
+
+  if (required && isDefaultNull && !input[key]) throw new Error(`${key} missing`)
+
+  if (!required && !input[key]) return false
+
+  return true
 }
 
 const checkType = (key, schema, input) => {
   // checks for simple schemas and arrays, but need to also check for nested schemas
-  const type = typeof (schema[key].type ?? schema[key][0].type ?? schema[key])()
+  const type = typeof (schema[key].type
+    ? schema[key].type
+    : schema[key][0].type
+    ? schema[key][0].type
+    : schema[key][0])()
 
   if (input[key] && type !== typeof input[key])
     throw new Error(`${key} must be a valid ${type}`)
@@ -51,7 +58,8 @@ const validateSchema = (schema, input) => {
 
     for (let key in schema) {
       // check if required key is present, and if it is, whether a default is provided
-      checkRequired(key, schema, input)
+      // if field isn't required or provided, returns false, and we go to next key
+      if (!checkRequired(key, schema, input)) continue
 
       // check if field is of proper type
       checkType(key, schema, input)
