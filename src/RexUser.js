@@ -24,8 +24,8 @@ const RexUser = (schema) => {
       return next()
     }
 
-    const hash = await hash(this.password, 10)
-    this.password = hash
+    const hashedPassword = await hash(this.password, 10)
+    this.password = hashedPassword
     next()
   })
 
