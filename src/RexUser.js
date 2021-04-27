@@ -1,10 +1,8 @@
-const { compare, hash, hash } = require('bcryptjs')
+const { compare, hash } = require('bcryptjs')
 const { verify } = require('jsonwebtoken')
 const cookie = require('cookie')
 const mongoose = require('mongoose')
 const { validateSchema, checkFields } = require('./ValidateSchema')
-
-// TODO: implement a way to refresh password with email
 
 const RexUser = (schema) => {
   const userSchema = mongoose.Schema(
@@ -21,7 +19,6 @@ const RexUser = (schema) => {
     }
   )
 
-  // TODO: implement this automatic hashing, so it won't be necessary for other things like reset tokens
   userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
       return next()
