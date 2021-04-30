@@ -127,6 +127,11 @@ const RexUser = (schema) => {
         throw new Error('Malformed token')
       }
 
+      if (decoded.exp * 1000 <= Date.now()) {
+        res.status(401)
+        throw new Error('Token expired')
+      }
+
       const userExists = await User.findById(decoded.id)
 
       if (!userExists) {

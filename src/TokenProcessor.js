@@ -30,7 +30,7 @@ class TokenProcessor {
       cookie.serialize(cookieName, token, {
         path: route,
         httpOnly: true,
-        expires: new Date(Date.now() + exp * 1000),
+        expires: !token ? 1 : new Date(Date.now() + exp * 1000),
       })
     )
   }
