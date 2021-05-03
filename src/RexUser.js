@@ -21,11 +21,6 @@ const RexUser = (schema) => {
 
   const User = mongoose.model('User', userSchema)
 
-  /**
-   * @description Middleware that lets next function know (login, refresh, or registerAndLogin) which fields to send to the front end.
-   * @param {*} publicFields
-   * @returns Express middleware function with an array of which fields to send to front end
-   */
   const fields = (publicFields) => {
     try {
       if (checkFields(userSchema.paths, publicFields)) {
@@ -160,8 +155,8 @@ const RexUser = (schema) => {
       res.status(200).send({
         userInfo,
         accessToken: tokens.generateAccessToken({
-          id: foundUser._id,
-          email: foundUser.email,
+          id: newUser._id,
+          email: newUser.email,
         }),
       })
     } catch (err) {
@@ -172,6 +167,7 @@ const RexUser = (schema) => {
   async function protect(req, res, next) {
     let token
     try {
+      // TODO: add req.headers.authorization.startsWith('Bearer) to condition
       token = req.headers.authorization && req.headers.authorization.split(' ')[1]
 
       if (!token) {
