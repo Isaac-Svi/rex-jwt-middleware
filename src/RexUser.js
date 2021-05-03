@@ -21,6 +21,11 @@ const RexUser = (schema) => {
 
   const User = mongoose.model('User', userSchema)
 
+  /**
+   * @description Middleware that lets next function know (login, refresh, or registerAndLogin) which fields to send to the front end.
+   * @param {*} publicFields
+   * @returns Express middleware function with an array of which fields to send to front end
+   */
   const fields = (publicFields) => {
     try {
       if (checkFields(userSchema.paths, publicFields)) {
@@ -105,6 +110,60 @@ const RexUser = (schema) => {
       })
 
       res.status(201).send({ msg: 'User created successfully' })
+    } catch (err) {
+      res.send({ error: err.message })
+    }
+  }
+
+  async function registerAndLogin(req, res, next) {
+    let { email, password } = req.body
+    const { tokens } = req
+
+    try {
+      if (!email || !password) throw new Error('Insufficient credentials provided')
+
+      // default is 6
+      if (password.length < 6) throw new Error('Password must be at least 6 characters long')
+
+      password = await hash(password, 10)
+
+      validateSchema(schema, { ...req.body, email, password })
+
+      const foundUser = await User.findOne({ email })
+      if (foundUser) {
+        res.status(400)
+        throw new Error('Email already taken')
+      }
+
+      const newUser = await User.create({
+        ...req.body,
+        email,
+        password,
+      })
+
+      tokens.sendRefreshToken(
+        res,
+        tokens.generateRefreshToken({
+          id: newUser._id,
+          tokenVersion: newUser.tokenVersion,
+        })
+      )
+
+      let { publicFields: fields } = res.locals
+      fields = fields || ['email']
+
+      const userInfo = {}
+      fields.forEach((field) => {
+        userInfo[field] = newUser[field]
+      })
+
+      res.status(200).send({
+        userInfo,
+        accessToken: tokens.generateAccessToken({
+          id: foundUser._id,
+          email: foundUser.email,
+        }),
+      })
     } catch (err) {
       res.send({ error: err.message })
     }
@@ -225,7 +284,7 @@ const RexUser = (schema) => {
     res.status(200).send({ ok: true })
   }
 
-  return { login, register, protect, refresh, logout, fields, User }
+  return { login, register, registerAndLogin, protect, refresh, logout, fields, User }
 }
 
 module.exports = RexUser
